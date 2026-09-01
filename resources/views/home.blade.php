@@ -1,0 +1,14 @@
+@extends('layouts.app')
+@section('content')
+<div class="travel-home">
+<section class="hero">
+ <nav><div class="brand">Kuakata<span>Stay</span></div><div class="nav-links"><a>Hotels</a><a>Destinations</a><a>Deals</a><a>About</a></div><div><a class="login">Sign in</a><a class="nav-cta">List your hotel</a></div></nav>
+ <div class="hero-content"><p class="eyebrow">KUAKATA • BANGLADESH</p><h1>Find your perfect<br>stay by the sea.</h1><p>Discover hotels, resorts and unique stays with simple, secure booking.</p></div>
+ <form class="search-card"><label>Destination<input placeholder="Where do you want to go?"></label><label>Check-in<input type="date"></label><label>Check-out<input type="date"></label><label>Guests<input placeholder="2 Guests, 1 Room"></label><button>Search stays</button></form>
+</section>
+<section class="benefits"><div>🛡️ <b>Best Price</b><span>Great stays at fair prices</span></div><div>🕒 <b>24/7 Support</b><span>Help whenever you need it</span></div><div>↩️ <b>Flexible Booking</b><span>Clear cancellation options</span></div><div>🔒 <b>Secure Payments</b><span>Protected booking flow</span></div></section>
+<section class="content-section"><div class="section-head"><div><p class="eyebrow">EXPLORE</p><h2>Popular destinations</h2></div><a>View all →</a></div><div class="destination-grid"><article class="destination kuakata"><span>Kuakata</span><small>Sea beach & resorts</small></article><article class="destination cox"><span>Cox's Bazar</span><small>Beach hotels</small></article><article class="destination sundarban"><span>Sundarbans</span><small>Nature stays</small></article><article class="destination dhaka"><span>Dhaka</span><small>City hotels</small></article></div></section>
+<section class="content-section light"><div class="section-head"><div><p class="eyebrow">HANDPICKED</p><h2>Recommended stays</h2></div><a>View all hotels →</a></div><div class="hotel-grid">@for($i=1;$i<=4;$i++)<article class="hotel-card"><div class="hotel-image h{{$i}}"><button>♡</button></div><div class="hotel-info"><div><h3>{{['Ocean View Resort','Kuakata Grand Hotel','Beach Paradise Resort','Blue Horizon Retreat'][$i-1]}}</h3><p>📍 Kuakata, Bangladesh</p></div><div class="rating">★ 4.{{8-$i}}</div><div class="price">From <strong>৳{{[4500,6200,3800,7500][$i-1]}}</strong> / night</div></div></article>@endfor</div></section>
+<section class="host-banner"><div><p class="eyebrow">FOR HOTEL OWNERS</p><h2>Grow your hotel business with us.</h2><p>Manage rooms, bookings, staff and payouts from one powerful platform.</p></div><a class="nav-cta">Become a partner →</a></section>
+</div>
+@endsection
