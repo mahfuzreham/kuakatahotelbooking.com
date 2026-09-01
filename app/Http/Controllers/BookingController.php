@@ -84,6 +84,7 @@ class BookingController extends Controller
                 'nights' => $nights,
                 'guest_name' => $data['guest_name'],
                 'guest_email' => $data['guest_email'],
+                'guest_phone' => $data['guest_phone'] ?? null,
                 'status' => 'pending_payment',
                 'total' => $total,
             ]);
