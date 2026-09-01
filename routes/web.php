@@ -1,10 +1,9 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
-
-Route::view('/', 'home')->name('home');
-Route::view('/search', 'search')->name('search');
-Route::view('/partner', 'vendor')->name('vendor.landing');
-Route::middleware('auth')->group(function () {
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
+use App\Http\Controllers\DashboardController;
+Route::get('/',fn()=>view('welcome'));
+Route::middleware('auth')->group(function(){
+ Route::get('/dashboard/admin',[DashboardController::class,'admin'])->name('dashboard.admin');
+ Route::get('/dashboard/vendor',[DashboardController::class,'vendor'])->name('dashboard.vendor');
+ Route::get('/dashboard/hotel',[DashboardController::class,'hotel'])->name('dashboard.hotel');
 });
