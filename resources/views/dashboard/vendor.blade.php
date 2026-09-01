@@ -1,0 +1,5 @@
+@extends('layouts.app')
+@section('content')
+<div class="dashboard"><aside><h2>Vendor Portal</h2><a>Dashboard</a><a>Properties</a><a>Rooms</a><a>Calendar</a><a>Bookings</a><a>Payouts</a></aside><main><h1>Vendor Dashboard</h1><div class="stats"><div>Properties<br><strong>Manage Hotels</strong></div><div>Available Balance<br><strong id="balance">—</strong></div><div>Upcoming Bookings<br><strong>View Bookings</strong></div></div><section><h3>Wallet & Payouts</h3><div id="wallet">Loading…</div></section></main></div>
+<script>fetch('/api/vendor/payouts',{headers:{Accept:'application/json'}}).then(r=>r.json()).then(d=>{document.getElementById('wallet').innerText=JSON.stringify(d,null,2);document.getElementById('balance').innerText=d.wallet?.available_balance??0}).catch(()=>document.getElementById('wallet').innerText='Please sign in to view your wallet');</script>
+@endsection
