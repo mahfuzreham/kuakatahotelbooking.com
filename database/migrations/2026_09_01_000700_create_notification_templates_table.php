@@ -1,0 +1,3 @@
+<?php
+use Illuminate\Database\Migrations\Migration;use Illuminate\Database\Schema\Blueprint;use Illuminate\Support\Facades\Schema;
+return new class extends Migration{public function up():void{Schema::create('notification_templates',function(Blueprint $t){$t->id();$t->string('channel');$t->string('code');$t->string('subject')->nullable();$t->longText('body');$t->boolean('is_active')->default(true);$t->timestamps();$t->unique(['channel','code']);});}public function down():void{Schema::dropIfExists('notification_templates');}};
