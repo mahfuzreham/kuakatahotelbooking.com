@@ -7,6 +7,10 @@ use App\Http\Controllers\PublicBookingController;
 use App\Http\Controllers\ShurjoPayController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerDashboardController;
+use App\Http\Controllers\AdminVendorController;
+use App\Http\Controllers\AdminPropertyController;
+use App\Http\Controllers\VendorRegistrationController;
+use App\Http\Controllers\VendorPropertyController;
 
 Route::get('/',fn()=>view('home'))->name('home');
 Route::get('/hotels/{property:slug}',fn()=>view('hotel-details'))->name('hotel.details');
