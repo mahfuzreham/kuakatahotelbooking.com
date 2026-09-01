@@ -25,6 +25,11 @@ Route::middleware('auth')->group(function(){
  Route::get('/account',[CustomerDashboardController::class,'index'])->name('customer.dashboard');
  Route::get('/account/bookings/{booking}',[CustomerDashboardController::class,'booking'])->name('customer.booking');
  Route::get('/dashboard/admin',[DashboardController::class,'admin'])->name('dashboard.admin');
- Route::get('/dashboard/vendor',[DashboardController::class,'vendor'])->name('dashboard.vendor');
+ Route::get('/dashboard/vendor',[CustomerDashboardController::class,'vendor'])->name('vendor.dashboard');
+ Route::get('/vendor/register',[VendorRegistrationController::class,'create'])->name('vendor.register');
+ Route::post('/vendor/register',[VendorRegistrationController::class,'store'])->name('vendor.register.store');
+ Route::get('/vendor/properties',[VendorPropertyController::class,'index'])->name('vendor.properties.index');
+ Route::get('/vendor/properties/create',[VendorPropertyController::class,'create'])->name('vendor.properties.create');
+ Route::post('/vendor/properties',[VendorPropertyController::class,'store'])->name('vendor.properties.store');
  Route::get('/dashboard/hotel',[DashboardController::class,'hotel'])->name('dashboard.hotel');
 });
