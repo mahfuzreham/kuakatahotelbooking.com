@@ -1,0 +1,4 @@
+<?php
+namespace App\Jobs;
+use App\Services\NotificationService; use Illuminate\Bus\Queueable; use Illuminate\Contracts\Queue\ShouldQueue; use Illuminate\Foundation\Bus\Dispatchable; use Illuminate\Queue\InteractsWithQueue; use Illuminate\Queue\SerializesModels;
+class SendPlatformNotification implements ShouldQueue { use Dispatchable,InteractsWithQueue,Queueable,SerializesModels; public $tries=3; public function __construct(public string $channel,public string $code,public string $recipient,public array $data=[],public ?int $userId=null,public ?int $bookingId=null){} public function handle(NotificationService $service):void{$service->send($this->channel,$this->code,$this->recipient,$this->data,$this->userId,$this->bookingId);} }
