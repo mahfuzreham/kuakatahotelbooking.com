@@ -1,0 +1,9 @@
+<?php
+namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller; use App\Models\CommissionRule; use App\Models\Payout; use App\Models\VendorWallet; use Illuminate\Http\Request; use Illuminate\Support\Facades\DB;
+class FinanceController extends Controller {
+ public function overview(){return response()->json(['wallets'=>VendorWallet::sum('available_balance'),'pending_payouts'=>Payout::where('status','requested')->sum('amount'),'commission_rules'=>CommissionRule::where('is_active',true)->count()]);}
+ public function commissionRules(){return CommissionRule::orderByDesc('priority')->get();}
+ public function storeRule(Request $request){$d=$request->validate(['scope_type'=>['required','string'],'scope_id'=>['nullable','integer'],'type'=>['required','in:percentage,fixed'],'value'=>['required','numeric','min:0'],'priority'=>['nullable','integer','min:0']]);return response()->json(CommissionRule::create($d+['is_active'=>true]),201);}
+ public function processPayout(Request $request,Payout $payout){$d=$request->validate(['action'=>['required','in:approve,reject,mark_paid'],'reference'=>['nullable','string','max:255']]);DB::transaction(function()use($payout,$d){$payout->lockForUpdate();abort_if(!in_array($payout->status,['requested','approved'],true),422);if($d['action']==='reject'){$payout->update(['status'=>'rejected']);$w=VendorWallet::where('vendor_id',$payout->vendor_id)->lockForUpdate()->firstOrFail();$w->increment('available_balance',$payout->amount);return;}if($d['action']==='approve'){$payout->update(['status'=>'approved']);return;}$payout->update(['status'=>'paid','reference'=>$d['reference']??null,'processed_at'=>now()]);$w=VendorWallet::where('vendor_id',$payout->vendor_id)->lockForUpdate()->firstOrFail();$w->increment('paid_balance',$payout->amount);});return response()->json(['message'=>'Payout updated']);}
+}
