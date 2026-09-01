@@ -11,6 +11,7 @@ use App\Http\Controllers\AdminVendorController;
 use App\Http\Controllers\AdminPropertyController;
 use App\Http\Controllers\VendorRegistrationController;
 use App\Http\Controllers\VendorPropertyController;
+use App\Http\Controllers\VendorRoomController;
 
 Route::get('/',fn()=>view('home'))->name('home');
 Route::get('/hotels/{property:slug}',fn()=>view('hotel-details'))->name('hotel.details');
@@ -43,5 +44,8 @@ Route::middleware('auth')->group(function(){
  Route::get('/vendor/properties',[VendorPropertyController::class,'index'])->name('vendor.properties.index');
  Route::get('/vendor/properties/create',[VendorPropertyController::class,'create'])->name('vendor.properties.create');
  Route::post('/vendor/properties',[VendorPropertyController::class,'store'])->name('vendor.properties.store');
+ Route::get('/vendor/properties/{property}/rooms',[VendorRoomController::class,'index'])->name('vendor.rooms.index');
+ Route::post('/vendor/properties/{property}/room-types',[VendorRoomController::class,'storeType'])->name('vendor.room-types.store');
+ Route::post('/vendor/properties/{property}/rooms',[VendorRoomController::class,'storeRoom'])->name('vendor.rooms.store');
  Route::get('/dashboard/hotel',[DashboardController::class,'hotel'])->name('dashboard.hotel');
 });
