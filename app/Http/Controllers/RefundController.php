@@ -1,0 +1,4 @@
+<?php
+namespace App\Http\Controllers;
+use App\Models\Booking; use App\Models\Refund; use Illuminate\Http\Request;
+class RefundController extends Controller { public function request(Request $request, Booking $booking){ $d=$request->validate(['amount'=>['required','numeric','min:0.01','max:'.$booking->total],'reason'=>['nullable','string','max:1000']]); $payment=$booking->payments()->where('status','paid')->latest()->firstOrFail(); return response()->json(['refund'=>Refund::create(['booking_id'=>$booking->id,'payment_id'=>$payment->id,'amount'=>$d['amount'],'reason'=>$d['reason']??null,'status'=>'pending_review'])],201); } public function approve(Refund $refund){ abort_if($refund->status!=='pending_review',422); $refund->update(['status'=>'approved']); return response()->json(['message'=>'Refund approved']); } }
