@@ -30,10 +30,7 @@ class PublicHotelController extends Controller
             'check_in'=>['required','date','after_or_equal:today'],
             'check_out'=>['required','date','after:check_in'],
         ]);
-        return app(BookingController::class)->search(new Request([
-            'property_id'=>$property->id,
-            'check_in'=>$data['check_in'],
-            'check_out'=>$data['check_out'],
-        ]));
+        $request->merge(['property_id' => $property->id]);
+        return app(BookingController::class)->search($request);
     }
 }
