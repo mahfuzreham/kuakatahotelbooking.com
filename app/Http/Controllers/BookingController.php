@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\BookingItem;
 use App\Models\RoomAvailability;
 use App\Models\RoomType;
 use Carbon\Carbon;
