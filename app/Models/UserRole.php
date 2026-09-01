@@ -1,10 +1,10 @@
 <?php
-
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
-
-class UserRole extends Model
-{
-    protected $fillable = ['user_id','role_id','vendor_id','property_id'];
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+class UserRole extends Model {
+ protected $table='user_roles';
+ protected $fillable=['user_id','role_id','vendor_id','property_id'];
+ public function user():BelongsTo{return $this->belongsTo(User::class);}
+ public function role():BelongsTo{return $this->belongsTo(Role::class);}
 }
