@@ -1,0 +1,7 @@
+@extends('layouts.app')
+@section('content')
+<div class="hotel-page"><div class="booking-box" style="max-width:520px;margin:70px auto"><p class="eyebrow">SECURE PAYMENT</p><h1>Complete your booking</h1><p>Booking <strong>{{ $booking->booking_number }}</strong></p><p>Total</p><h2>৳{{ number_format((float)$booking->total,2) }}</h2><label>Payment method<select id="provider"><option value="manual">Manual / Offline</option><option value="bkash">bKash</option><option value="nagad">Nagad</option><option value="card">Card</option></select></label><button id="pay">Continue to payment</button><div id="message"></div></div></div>
+<script>
+document.getElementById('pay').onclick=async()=>{const b=document.getElementById('pay');b.disabled=true;b.textContent='Preparing payment…';const r=await fetch('/api/bookings/{{ $booking->id }}/payments',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({provider:provider.value})});const d=await r.json();document.getElementById('message').textContent=r.ok?'Payment initialized. Gateway/manual instructions will appear here after provider integration.':(d.message||'Unable to start payment.');b.disabled=false;b.textContent='Continue to payment';};
+</script>
+@endsection
