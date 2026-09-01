@@ -16,7 +16,7 @@ use App\Http\Controllers\HotelSearchController;
 
 Route::get('/', fn () => view('home'))->name('home');
 Route::get('/search', [HotelSearchController::class, 'index'])->name('hotels.search');
-Route::get('/hotels/{property:slug}',fn()=>view('hotel-details'))->name('hotel.details');
+Route::get('/hotels/{property:slug}', fn () => view('hotel-details'))->name('hotel.details');
 Route::get('/booking/{booking}/payment',[PublicBookingController::class,'payment'])->name('booking.payment');
 Route::get('/booking/{booking}/invoice',[PublicBookingController::class,'invoice'])->name('booking.invoice');
 Route::get('/payments/shurjopay/callback',[ShurjoPayController::class,'callback'])->name('shurjopay.callback');
