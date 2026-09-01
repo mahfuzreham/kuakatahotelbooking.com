@@ -7,18 +7,17 @@ use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder
 {
- public function run(): void
- {
-  foreach ([
-   ['Super Admin','super-admin','Full platform access'],
-   ['Admin','admin','Operational platform access'],
-   ['Vendor','vendor','Business owner access'],
-   ['Hotel Manager','hotel-manager','Property management access'],
-   ['Reception','reception','Arrival and room assignment access'],
-   ['Housekeeping','housekeeping','Room operations access'],
-   ['Customer','customer','Booking customer access'],
-  ] as [$name,$slug,$description]) {
-   Role::updateOrCreate(['slug'=>$slug], compact('name','description'));
-  }
- }
+    public function run(): void
+    {
+        $roles = [
+            ['name' => 'Administrator', 'slug' => 'admin', 'description' => 'Full platform administration'],
+            ['name' => 'Vendor', 'slug' => 'vendor', 'description' => 'Hotel business owner'],
+            ['name' => 'Hotel Manager', 'slug' => 'hotel_manager', 'description' => 'Property management access'],
+            ['name' => 'Customer', 'slug' => 'customer', 'description' => 'Booking customer'],
+        ];
+
+        foreach ($roles as $role) {
+            Role::updateOrCreate(['slug' => $role['slug']], $role);
+        }
+    }
 }
