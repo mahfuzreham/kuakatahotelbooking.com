@@ -10,8 +10,10 @@ return new class extends Migration {
    $table->id();
    $table->foreignId('user_id')->constrained()->cascadeOnDelete();
    $table->foreignId('role_id')->constrained()->cascadeOnDelete();
-   $table->foreignId('vendor_id')->nullable()->constrained()->cascadeOnDelete();
-   $table->foreignId('property_id')->nullable()->constrained()->cascadeOnDelete();
+   // Vendor/property tables are created by later migrations, so keep these
+   // references as indexed nullable IDs to avoid migration-order FK failures.
+   $table->unsignedBigInteger('vendor_id')->nullable()->index();
+   $table->unsignedBigInteger('property_id')->nullable()->index();
    $table->timestamps();
    $table->index(['user_id','role_id']);
   });
