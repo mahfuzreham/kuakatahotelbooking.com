@@ -13,6 +13,8 @@ use App\Http\Controllers\VendorRegistrationController;
 use App\Http\Controllers\VendorPropertyController;
 use App\Http\Controllers\VendorRoomController;
 use App\Http\Controllers\HotelSearchController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 
 Route::get('/', fn () => view('home'))->name('home');
 Route::get('/search', [HotelSearchController::class, 'index'])->name('hotels.search');
@@ -33,7 +35,11 @@ Route::middleware('auth')->group(function(){
  Route::get('/account/bookings/{booking}',[CustomerDashboardController::class,'booking'])->name('customer.booking');
  Route::middleware('admin')->group(function(){
  Route::get('/dashboard/admin',[DashboardController::class,'admin'])->name('dashboard.admin');
- Route::get('/admin/users',[UserController::class,'index'])->name('admin.users.index');\n Route::post('/admin/users/{user}/roles',[UserController::class,'updateRoles'])->name('admin.users.roles');\n Route::get('/admin/vendors',[AdminVendorController::class,'index'])->name('admin.vendors.index');
+ Route::get('/admin/users',[UserController::class,'index'])->name('admin.users.index');
+ Route::post('/admin/users/{user}/roles',[UserController::class,'updateRoles'])->name('admin.users.roles');
+ Route::get('/admin/bookings',[AdminBookingController::class,'index'])->name('admin.bookings.index');
+ Route::post('/admin/bookings/{booking}/status',[AdminBookingController::class,'updateStatus'])->name('admin.bookings.status');
+ Route::get('/admin/vendors',[AdminVendorController::class,'index'])->name('admin.vendors.index');
  Route::post('/admin/vendors/{vendor}/approve',[AdminVendorController::class,'approve'])->name('admin.vendors.approve');
  Route::post('/admin/vendors/{vendor}/reject',[AdminVendorController::class,'reject'])->name('admin.vendors.reject');
  Route::get('/admin/properties',[AdminPropertyController::class,'index'])->name('admin.properties.index');
