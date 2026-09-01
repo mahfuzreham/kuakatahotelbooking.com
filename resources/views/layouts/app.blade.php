@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="{{ asset('public/css/home.css') }}?v=2">
 <link rel="stylesheet" href="{{ asset('public/css/hotel.css') }}?v=2">
 <link rel="stylesheet" href="{{ asset('public/css/dashboard.css') }}?v=2">
-<link rel="stylesheet" href="{{ asset('public/css/auth.css') }}?v=2">
+<link rel="stylesheet" href="{{ asset('public/css/auth.css') }}?v=2">\n<link rel="stylesheet" href="{{ asset('public/css/search-results.css') }}?v=1">
 </head>
 <body>
 @yield('content')
