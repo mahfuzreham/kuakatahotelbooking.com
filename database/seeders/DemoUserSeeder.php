@@ -12,23 +12,52 @@ class DemoUserSeeder extends Seeder
 {
     public function run(): void
     {
-        $user = User::updateOrCreate(
-            ['email' => 'demo@gmail.com'],
+        $accounts = [
             [
                 'name' => 'Demo Administrator',
+                'email' => 'demo@gmail.com',
                 'phone' => '01790614055',
-                'password' => Hash::make('01790614055'),
-                'email_verified_at' => now(),
-            ]
-        );
+                'roles' => ['admin'],
+            ],
+            [
+                'name' => 'Demo Vendor',
+                'email' => 'vendor@demo.com',
+                'phone' => '01790614056',
+                'roles' => ['vendor'],
+            ],
+            [
+                'name' => 'Demo Hotel Manager',
+                'email' => 'manager@demo.com',
+                'phone' => '01790614057',
+                'roles' => ['hotel_manager'],
+            ],
+            [
+                'name' => 'Demo Customer',
+                'email' => 'customar@demo.com',
+                'phone' => '01790614058',
+                'roles' => ['customer'],
+            ],
+        ];
 
-        $roles = Role::whereIn('slug', ['admin', 'vendor', 'hotel_manager', 'customer'])->get();
+        foreach ($accounts as $account) {
+            $user = User::updateOrCreate(
+                ['email' => $account['email']],
+                [
+                    'name' => $account['name'],
+                    'phone' => $account['phone'],
+                    'password' => Hash::make('01790614055'),
+                    'email_verified_at' => now(),
+                ]
+            );
 
-        foreach ($roles as $role) {
-            UserRole::firstOrCreate([
-                'user_id' => $user->id,
-                'role_id' => $role->id,
-            ]);
+            foreach ($account['roles'] as $slug) {
+                $role = Role::where('slug', $slug)->firstOrFail();
+
+                UserRole::firstOrCreate([
+                    'user_id' => $user->id,
+                    'role_id' => $role->id,
+                ]);
+            }
         }
     }
 }
