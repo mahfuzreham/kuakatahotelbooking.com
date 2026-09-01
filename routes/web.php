@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function(){
  Route::get('/account/bookings/{booking}',[CustomerDashboardController::class,'booking'])->name('customer.booking');
  Route::middleware('admin')->group(function(){
  Route::get('/dashboard/admin',[DashboardController::class,'admin'])->name('dashboard.admin');
- Route::get('/admin/vendors',[AdminVendorController::class,'index'])->name('admin.vendors.index');
+ Route::get('/admin/users',[UserController::class,'index'])->name('admin.users.index');\n Route::post('/admin/users/{user}/roles',[UserController::class,'updateRoles'])->name('admin.users.roles');\n Route::get('/admin/vendors',[AdminVendorController::class,'index'])->name('admin.vendors.index');
  Route::post('/admin/vendors/{vendor}/approve',[AdminVendorController::class,'approve'])->name('admin.vendors.approve');
  Route::post('/admin/vendors/{vendor}/reject',[AdminVendorController::class,'reject'])->name('admin.vendors.reject');
  Route::get('/admin/properties',[AdminPropertyController::class,'index'])->name('admin.properties.index');
