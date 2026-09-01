@@ -1,0 +1,3 @@
+<?php
+use Illuminate\Database\Migrations\Migration; use Illuminate\Database\Schema\Blueprint; use Illuminate\Support\Facades\Schema;
+return new class extends Migration { public function up():void{ Schema::create('refunds',function(Blueprint $t){$t->id();$t->foreignId('booking_id')->constrained()->cascadeOnDelete();$t->foreignId('payment_id')->constrained()->cascadeOnDelete();$t->decimal('amount',12,2);$t->text('reason')->nullable();$t->string('status')->default('pending_review');$t->string('provider_reference')->nullable();$t->timestamp('processed_at')->nullable();$t->json('meta')->nullable();$t->timestamps();});} public function down():void{Schema::dropIfExists('refunds');}};
