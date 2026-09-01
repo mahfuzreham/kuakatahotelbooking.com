@@ -1,20 +1,5 @@
 <?php
-
-use App\Http\Controllers\BookingController;
-use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\Vendor\AvailabilityController;
-use App\Http\Controllers\Vendor\PropertyController;
-use App\Http\Controllers\Vendor\RoomTypeController;
-use Illuminate\Support\Facades\Route;
-
-Route::get('/availability/search', [BookingController::class, 'search']);
-Route::post('/bookings', [BookingController::class, 'store']);
-Route::post('/bookings/{booking}/payments', [PaymentController::class, 'initiate']);
-Route::post('/payments/{payment}/confirm', [PaymentController::class, 'confirm']);
-
-Route::middleware('auth')->prefix('vendor')->group(function () {
- Route::get('/properties', [PropertyController::class, 'index']);
- Route::post('/properties', [PropertyController::class, 'store']);
- Route::post('/properties/{property}/room-types', [RoomTypeController::class, 'store']);
- Route::post('/room-types/{roomType}/availability/bulk', [AvailabilityController::class, 'bulkUpdate']);
-});
+use App\Http\Controllers\BookingCancellationController;use App\Http\Controllers\BookingController;use App\Http\Controllers\PaymentController;use App\Http\Controllers\RefundController;use App\Http\Controllers\Admin\FinanceController;use App\Http\Controllers\Vendor\AvailabilityController;use App\Http\Controllers\Vendor\PropertyController;use App\Http\Controllers\Vendor\RoomTypeController;use Illuminate\Support\Facades\Route;
+Route::get('/availability/search',[BookingController::class,'search']);Route::post('/bookings',[BookingController::class,'store']);Route::post('/bookings/{booking}/payments',[PaymentController::class,'initiate']);Route::post('/payments/{payment}/confirm',[PaymentController::class,'confirm']);Route::post('/bookings/{booking}/cancel',[BookingCancellationController::class,'cancel']);Route::post('/bookings/{booking}/refunds',[RefundController::class,'request']);Route::post('/refunds/{refund}/approve',[RefundController::class,'approve']);
+Route::middleware('auth')->prefix('vendor')->group(function(){Route::get('/properties',[PropertyController::class,'index']);Route::post('/properties',[PropertyController::class,'store']);Route::post('/properties/{property}/room-types',[RoomTypeController::class,'store']);Route::post('/room-types/{roomType}/availability/bulk',[AvailabilityController::class,'bulkUpdate']);});
+Route::middleware('auth')->prefix('admin')->group(function(){Route::get('/finance/overview',[FinanceController::class,'overview']);Route::get('/finance/commission-rules',[FinanceController::class,'commissionRules']);Route::post('/finance/commission-rules',[FinanceController::class,'storeRule']);Route::post('/finance/payouts/{payout}/process',[FinanceController::class,'processPayout']);});
