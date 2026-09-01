@@ -1,0 +1,4 @@
+<?php
+namespace App\Console\Commands;
+use App\Models\Booking; use App\Services\BookingInventoryService; use Illuminate\Console\Command;
+class ExpirePendingBookings extends Command { protected $signature='bookings:expire-pending {--minutes=20}'; protected $description='Expire unpaid bookings and release inventory'; public function handle(BookingInventoryService $inventory):int{ $cutoff=now()->subMinutes((int)$this->option('minutes')); Booking::where('status','pending_payment')->where('created_at','<=',$cutoff)->orderBy('id')->chunkById(100,function($rows)use($inventory){foreach($rows as $booking){$booking->refresh();if($booking->status!=='pending_payment')continue;$inventory->release($booking);$booking->update(['status'=>'expired']);}});$this->info('Pending bookings processed.');return self::SUCCESS;} }
