@@ -13,7 +13,7 @@ use App\Http\Controllers\VendorRegistrationController;
 use App\Http\Controllers\VendorPropertyController;
 use App\Http\Controllers\VendorRoomController;
 
-Route::get('/',fn()=>view('home'))->name('home');
+Route::get('/',fn()=>view('home'))->name('home');\nRoute::get('/search',[HotelSearchController::class,'index'])->name('hotels.search');
 Route::get('/hotels/{property:slug}',fn()=>view('hotel-details'))->name('hotel.details');
 Route::get('/booking/{booking}/payment',[PublicBookingController::class,'payment'])->name('booking.payment');
 Route::get('/booking/{booking}/invoice',[PublicBookingController::class,'invoice'])->name('booking.invoice');
