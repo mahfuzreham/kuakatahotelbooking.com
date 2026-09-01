@@ -1,0 +1,4 @@
+@extends('layouts.app')
+@section('content')
+<div class="auth-page"><form class="auth-card" method="POST" action="{{ route('register') }}">@csrf<p class="eyebrow">CREATE ACCOUNT</p><h1>Start booking smarter.</h1><p class="muted">One account for bookings, invoices and future stays.</p><label>Full name<input name="name" value="{{ old('name') }}" required></label><label>Email address<input type="email" name="email" value="{{ old('email') }}" required></label><label>Phone (optional)<input name="phone" value="{{ old('phone') }}"></label><label>Password<input type="password" name="password" required></label><label>Confirm password<input type="password" name="password_confirmation" required></label>@error('email')<p class="error">{{ $message }}</p>@enderror<button>Create account</button><p class="auth-foot">Already have an account? <a href="{{ route('login') }}">Sign in</a></p></form></div>
+@endsection
