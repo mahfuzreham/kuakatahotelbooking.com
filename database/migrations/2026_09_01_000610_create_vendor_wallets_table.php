@@ -1,0 +1,3 @@
+<?php
+use Illuminate\Database\Migrations\Migration;use Illuminate\Database\Schema\Blueprint;use Illuminate\Support\Facades\Schema;
+return new class extends Migration{public function up():void{Schema::create('vendor_wallets',function(Blueprint $t){$t->id();$t->foreignId('vendor_id')->unique()->constrained()->cascadeOnDelete();$t->decimal('pending_balance',14,2)->default(0);$t->decimal('available_balance',14,2)->default(0);$t->decimal('paid_balance',14,2)->default(0);$t->string('currency',10)->default('BDT');$t->timestamps();});}public function down():void{Schema::dropIfExists('vendor_wallets');}};
