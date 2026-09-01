@@ -53,6 +53,7 @@ class PaymentController extends Controller
 
     public function confirm(Request $request, Payment $payment)
     {
+        abort_unless(config('app.env') === 'local' && auth()->check() && auth()->user()->isAdmin(), 403, 'Direct payment confirmation is disabled.');
         DB::transaction(function () use ($payment, $request) {
             $payment->refresh()->lockForUpdate();
             if ($payment->status === 'paid') return;
