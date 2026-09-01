@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Vendor\AvailabilityController;
 use App\Http\Controllers\Vendor\PropertyController;
 use App\Http\Controllers\Vendor\RoomTypeController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/availability/search', [BookingController::class, 'search']);
+Route::post('/bookings', [BookingController::class, 'store']);
 
 Route::middleware('auth')->prefix('vendor')->group(function () {
     Route::get('/properties', [PropertyController::class, 'index']);
