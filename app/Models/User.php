@@ -11,4 +11,6 @@ class User extends Authenticatable implements MustVerifyEmail {
  protected $hidden=['password','remember_token'];
  protected function casts():array{return ['email_verified_at'=>'datetime','password'=>'hashed'];}
  public function bookings():HasMany{return $this->hasMany(Booking::class);}
+ public function roles():HasMany{return $this->hasMany(UserRole::class);}
+ public function isAdmin():bool{return $this->roles()->whereHas('role',fn($q)=>$q->where('slug','admin'))->exists();}
 }
