@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Authentication/authorization middleware will be configured here.
+        $middleware->alias(['admin' => \\App\\Http\\Middleware\\EnsureAdmin::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Exception reporting configuration will be added here.
