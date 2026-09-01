@@ -1,0 +1,2 @@
+@extends('layouts.app')
+@section('content')<div class="auth-page"><form class="auth-card" method="POST" action="{{ route('vendor.register.store') }}">@csrf<p class="eyebrow">PARTNER WITH US</p><h1>List your hotel.</h1><p class="muted">Submit your business details. Our team will review your application.</p><label>Hotel or business name<input name="business_name" required value="{{ old('business_name') }}"></label><button>Submit application</button></form></div>@endsection
