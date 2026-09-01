@@ -40,6 +40,7 @@ class BookingController extends Controller
             'check_out' => ['required','date','after:check_in'],
             'guest_name' => ['required','string','max:255'],
             'guest_email' => ['required','email','max:255'],
+            'guest_phone' => ['nullable','string','max:50'],
         ]);
 
         return DB::transaction(function () use ($data, $request) {
@@ -80,9 +81,13 @@ class BookingController extends Controller
                 'check_in' => $data['check_in'],
                 'check_out' => $data['check_out'],
                 'nights' => $nights,
+                'guest_name' => $data['guest_name'],
+                'guest_email' => $data['guest_email'],
                 'status' => 'pending_payment',
                 'total' => $total,
             ]);
+
+            BookingItem::create(['booking_id'=>$booking->id,'room_type_id'=>$room->id,'quantity'=>1,'unit_price'=>$total]);
 
             return response()->json([
                 'booking' => $booking,
