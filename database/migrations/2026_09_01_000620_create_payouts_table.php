@@ -1,0 +1,3 @@
+<?php
+use Illuminate\Database\Migrations\Migration;use Illuminate\Database\Schema\Blueprint;use Illuminate\Support\Facades\Schema;
+return new class extends Migration{public function up():void{Schema::create('payouts',function(Blueprint $t){$t->id();$t->foreignId('vendor_id')->constrained()->cascadeOnDelete();$t->decimal('amount',14,2);$t->string('currency',10)->default('BDT');$t->string('method');$t->string('status')->default('requested');$t->string('reference')->nullable();$t->timestamp('requested_at')->nullable();$t->timestamp('processed_at')->nullable();$t->json('meta')->nullable();$t->timestamps();});}public function down():void{Schema::dropIfExists('payouts');}};
