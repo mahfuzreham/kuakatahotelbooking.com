@@ -24,10 +24,15 @@ Route::middleware('auth')->group(function(){
  Route::post('/email/verification-notification',function(Request $request){$request->user()->sendEmailVerificationNotification();return back()->with('status','verification-link-sent');})->middleware('throttle:6,1')->name('verification.send');
  Route::get('/account',[CustomerDashboardController::class,'index'])->name('customer.dashboard');
  Route::get('/account/bookings/{booking}',[CustomerDashboardController::class,'booking'])->name('customer.booking');
+ Route::middleware('admin')->group(function(){
  Route::get('/dashboard/admin',[DashboardController::class,'admin'])->name('dashboard.admin');
  Route::get('/admin/vendors',[AdminVendorController::class,'index'])->name('admin.vendors.index');
  Route::post('/admin/vendors/{vendor}/approve',[AdminVendorController::class,'approve'])->name('admin.vendors.approve');
  Route::post('/admin/vendors/{vendor}/reject',[AdminVendorController::class,'reject'])->name('admin.vendors.reject');
+ Route::get('/admin/properties',[AdminPropertyController::class,'index'])->name('admin.properties.index');
+ Route::post('/admin/properties/{property}/approve',[AdminPropertyController::class,'approve'])->name('admin.properties.approve');
+ Route::post('/admin/properties/{property}/reject',[AdminPropertyController::class,'reject'])->name('admin.properties.reject');
+ });
  Route::get('/dashboard/vendor',[CustomerDashboardController::class,'vendor'])->name('vendor.dashboard');
  Route::get('/vendor/register',[VendorRegistrationController::class,'create'])->name('vendor.register');
  Route::post('/vendor/register',[VendorRegistrationController::class,'store'])->name('vendor.register.store');
