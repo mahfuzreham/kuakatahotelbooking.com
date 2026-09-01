@@ -1,0 +1,4 @@
+<?php
+namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller;use App\Models\NotificationTemplate;use Illuminate\Http\Request;
+class NotificationTemplateController extends Controller { public function index(){return NotificationTemplate::latest()->get();} public function store(Request $r){$d=$r->validate(['channel'=>['required','in:email,sms'],'code'=>['required','string','max:100'],'subject'=>['nullable','string','max:255'],'body'=>['required','string'],'is_active'=>['boolean']]);return response()->json(NotificationTemplate::updateOrCreate(['channel'=>$d['channel'],'code'=>$d['code']],$d),201);} }
