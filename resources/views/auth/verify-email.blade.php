@@ -1,0 +1,4 @@
+@extends('layouts.app')
+@section('content')
+<div class="auth-page"><div class="auth-card"><p class="eyebrow">EMAIL VERIFICATION</p><h1>Check your inbox.</h1><p class="muted">We sent a verification link to your email. Verify your account to unlock all customer features.</p>@if(session('status')==='verification-link-sent')<p class="success">A new verification link has been sent.</p>@endif<form method="POST" action="{{ route('verification.send') }}">@csrf<button>Resend verification email</button></form><form method="POST" action="{{ route('logout') }}" style="margin-top:12px">@csrf<button class="secondary">Sign out</button></form></div></div>
+@endsection
