@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Booking extends Model
 {
-    protected $fillable = [
-        'booking_number','user_id','property_id','guest_name','guest_email',
-        'check_in','check_out','nights','status','total'
-    ];
+    protected $fillable = ['booking_number','user_id','property_id','guest_name','guest_email','check_in','check_out','nights','status','total'];
+    protected $casts = ['check_in'=>'date','check_out'=>'date','total'=>'decimal:2'];
 
-    protected $casts = ['check_in' => 'date', 'check_out' => 'date', 'total' => 'decimal:2'];
+    public function items(): HasMany { return $this->hasMany(BookingItem::class); }
+    public function payments(): HasMany { return $this->hasMany(Payment::class); }
 }
