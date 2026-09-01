@@ -1,0 +1,5 @@
+@extends('layouts.app')
+@section('content')
+<div class="dashboard"><aside><h2>Kuakata Booking</h2><a>Overview</a><a>Bookings</a><a>Hotels</a><a>Vendors</a><a>Finance</a><a>Verifications</a></aside><main><h1>Admin Dashboard</h1><div class="stats"><div>Total Bookings<br><strong id="bookings">—</strong></div><div>Pending Payouts<br><strong id="payouts">—</strong></div><div>Active Hotels<br><strong>Manage</strong></div></div><section><h3>Finance Overview</h3><div id="finance">Loading…</div></section></main></div>
+<script>fetch('/api/admin/finance/overview',{headers:{Accept:'application/json'}}).then(r=>r.json()).then(d=>{document.getElementById('finance').innerText=JSON.stringify(d,null,2);document.getElementById('payouts').innerText=d.pending_payouts??0}).catch(()=>document.getElementById('finance').innerText='Please sign in to view data');</script>
+@endsection
