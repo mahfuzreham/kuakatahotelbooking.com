@@ -1,13 +1,15 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>{{ config('app.name','KuakataStay') }}</title>
-<link rel="stylesheet" href="{{ asset('css/home.css') }}">
-<link rel="stylesheet" href="{{ asset('css/hotel.css') }}">
-<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-<link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+<meta name="description" content="Find and book hotels and resorts in Kuakata, Bangladesh.">
+<link rel="stylesheet" href="{{ asset('public/css/home.css') }}?v=2">
+<link rel="stylesheet" href="{{ asset('public/css/hotel.css') }}?v=2">
+<link rel="stylesheet" href="{{ asset('public/css/dashboard.css') }}?v=2">
+<link rel="stylesheet" href="{{ asset('public/css/auth.css') }}?v=2">
 </head>
 <body>
 @yield('content')
