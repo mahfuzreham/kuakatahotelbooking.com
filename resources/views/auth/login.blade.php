@@ -1,0 +1,4 @@
+@extends('layouts.app')
+@section('content')
+<div class="auth-page"><form class="auth-card" method="POST" action="{{ route('login') }}">@csrf<p class="eyebrow">WELCOME BACK</p><h1>Sign in to your account.</h1><label>Email address<input type="email" name="email" value="{{ old('email') }}" required></label><label>Password<input type="password" name="password" required></label><label class="check"><input type="checkbox" name="remember" value="1"> Keep me signed in</label>@error('email')<p class="error">{{ $message }}</p>@enderror<button>Sign in</button><p class="auth-foot">New here? <a href="{{ route('register') }}">Create an account</a></p></form></div>
+@endsection
