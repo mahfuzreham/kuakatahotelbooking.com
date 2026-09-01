@@ -25,6 +25,9 @@ Route::middleware('auth')->group(function(){
  Route::get('/account',[CustomerDashboardController::class,'index'])->name('customer.dashboard');
  Route::get('/account/bookings/{booking}',[CustomerDashboardController::class,'booking'])->name('customer.booking');
  Route::get('/dashboard/admin',[DashboardController::class,'admin'])->name('dashboard.admin');
+ Route::get('/admin/vendors',[AdminVendorController::class,'index'])->name('admin.vendors.index');
+ Route::post('/admin/vendors/{vendor}/approve',[AdminVendorController::class,'approve'])->name('admin.vendors.approve');
+ Route::post('/admin/vendors/{vendor}/reject',[AdminVendorController::class,'reject'])->name('admin.vendors.reject');
  Route::get('/dashboard/vendor',[CustomerDashboardController::class,'vendor'])->name('vendor.dashboard');
  Route::get('/vendor/register',[VendorRegistrationController::class,'create'])->name('vendor.register');
  Route::post('/vendor/register',[VendorRegistrationController::class,'store'])->name('vendor.register.store');
