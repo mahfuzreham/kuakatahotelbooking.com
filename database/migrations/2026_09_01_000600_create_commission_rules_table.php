@@ -1,0 +1,3 @@
+<?php
+use Illuminate\Database\Migrations\Migration;use Illuminate\Database\Schema\Blueprint;use Illuminate\Support\Facades\Schema;
+return new class extends Migration{public function up():void{Schema::create('commission_rules',function(Blueprint $t){$t->id();$t->string('scope_type')->default('global');$t->unsignedBigInteger('scope_id')->nullable();$t->string('type')->default('percentage');$t->decimal('value',12,2);$t->boolean('is_active')->default(true);$t->unsignedInteger('priority')->default(0);$t->timestamps();});}public function down():void{Schema::dropIfExists('commission_rules');}};
