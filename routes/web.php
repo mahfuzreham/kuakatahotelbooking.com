@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function(){
  Route::post('/admin/properties/{property}/approve',[AdminPropertyController::class,'approve'])->name('admin.properties.approve');
  Route::post('/admin/properties/{property}/reject',[AdminPropertyController::class,'reject'])->name('admin.properties.reject');
  });
+ Route::middleware('role:vendor')->group(function(){
  Route::get('/dashboard/vendor',[CustomerDashboardController::class,'vendor'])->name('vendor.dashboard');
  Route::get('/vendor/register',[VendorRegistrationController::class,'create'])->name('vendor.register');
  Route::post('/vendor/register',[VendorRegistrationController::class,'store'])->name('vendor.register.store');
@@ -55,5 +56,6 @@ Route::middleware('auth')->group(function(){
  Route::get('/vendor/properties/{property}/rooms',[VendorRoomController::class,'index'])->name('vendor.rooms.index');
  Route::post('/vendor/properties/{property}/room-types',[VendorRoomController::class,'storeType'])->name('vendor.room-types.store');
  Route::post('/vendor/properties/{property}/rooms',[VendorRoomController::class,'storeRoom'])->name('vendor.rooms.store');
- Route::get('/dashboard/hotel',[DashboardController::class,'hotel'])->name('dashboard.hotel');
+ });
+ Route::middleware('role:hotel_manager')->get('/dashboard/hotel',[DashboardController::class,'hotel'])->name('dashboard.hotel');
 });
