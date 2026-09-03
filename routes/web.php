@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\RefundController as AdminRefundController;
 use App\Http\Controllers\Admin\FinanceWebController;
 use App\Http\Controllers\Admin\VerificationWebController;
 use App\Http\Controllers\Admin\NotificationWebController;
+use App\Http\Controllers\Admin\AuditLogController;
 
 Route::get('/', fn () => view('home'))->name('home');
 Route::get('/search', [HotelSearchController::class, 'index'])->name('hotels.search');
@@ -43,6 +44,7 @@ Route::middleware('auth')->group(function(){
  Route::post('/admin/users/{user}/roles',[UserController::class,'updateRoles'])->name('admin.users.roles');
  Route::get('/admin/bookings',[AdminBookingController::class,'index'])->name('admin.bookings.index');
  Route::post('/admin/bookings/{booking}/status',[AdminBookingController::class,'updateStatus'])->name('admin.bookings.status');
+ Route::get('/admin/audit-logs',[AuditLogController::class,'index'])->name('admin.audit.index');
  Route::get('/admin/notifications',[NotificationWebController::class,'index'])->name('admin.notifications.index');
  Route::post('/admin/notifications/send',[NotificationWebController::class,'send'])->name('admin.notifications.send');
  Route::get('/admin/verifications',[VerificationWebController::class,'index'])->name('admin.verifications.index');
