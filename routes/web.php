@@ -16,6 +16,7 @@ use App\Http\Controllers\HotelSearchController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\RefundController as AdminRefundController;
+use App\Http\Controllers\Admin\FinanceWebController;
 
 Route::get('/', fn () => view('home'))->name('home');
 Route::get('/search', [HotelSearchController::class, 'index'])->name('hotels.search');
@@ -40,6 +41,9 @@ Route::middleware('auth')->group(function(){
  Route::post('/admin/users/{user}/roles',[UserController::class,'updateRoles'])->name('admin.users.roles');
  Route::get('/admin/bookings',[AdminBookingController::class,'index'])->name('admin.bookings.index');
  Route::post('/admin/bookings/{booking}/status',[AdminBookingController::class,'updateStatus'])->name('admin.bookings.status');
+ Route::get('/admin/finance',[FinanceWebController::class,'index'])->name('admin.finance.index');
+ Route::post('/admin/finance/commission-rules',[FinanceWebController::class,'storeRule'])->name('admin.finance.rules.store');
+ Route::post('/admin/finance/payouts/{payout}/process',[FinanceWebController::class,'processPayout'])->name('admin.finance.payouts.process');
  Route::get('/admin/refunds',[AdminRefundController::class,'index'])->name('admin.refunds.index');
  Route::post('/admin/refunds/{refund}/approve',[AdminRefundController::class,'approve'])->name('admin.refunds.approve');
  Route::post('/admin/refunds/{refund}/reject',[AdminRefundController::class,'reject'])->name('admin.refunds.reject');
