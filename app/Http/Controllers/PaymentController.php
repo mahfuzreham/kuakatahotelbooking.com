@@ -11,6 +11,7 @@ class PaymentController extends Controller
 {
     public function initiate(Request $request, Booking $booking, ShurjoPayService $shurjoPay)
     {
+        abort_unless($request->user() && ($booking->user_id === $request->user()->id || $request->user()->isAdmin()),403,'You do not have permission to pay for this booking.');
         abort_unless($booking->status === 'pending_payment', 422, 'Booking cannot be paid.');
         $provider=$request->string('provider','manual')->toString();
 
