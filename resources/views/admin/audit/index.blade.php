@@ -1,0 +1,6 @@
+@extends('layouts.app')
+@section('content')
+<div class="container py-4"><h2>Admin Audit & Activity Logs</h2>
+<form class="row g-2 mb-3"><div class="col-md-4"><input class="form-control" name="action" value="{{ request('action') }}" placeholder="Search action"></div><div class="col-md-3"><input class="form-control" type="number" name="user_id" value="{{ request('user_id') }}" placeholder="User ID"></div><div class="col-md-2"><button class="btn btn-primary">Filter</button></div></form>
+<div class="table-responsive"><table class="table table-hover"><thead><tr><th>Time</th><th>User</th><th>Action</th><th>Subject</th><th>IP</th><th>Description</th></tr></thead><tbody>@forelse($logs as $log)<tr><td>{{ $log->created_at?->format('d M Y H:i:s') }}</td><td>{{ $log->user?->email ?? 'System/Deleted' }}</td><td>{{ $log->action }}</td><td>{{ $log->subject_type ? class_basename($log->subject_type).' #'.$log->subject_id : '—' }}</td><td>{{ $log->ip_address }}</td><td>{{ $log->description }}</td></tr>@empty<tr><td colspan="6" class="text-center">No activity logs yet.</td></tr>@endforelse</tbody></table></div>{{ $logs->withQueryString()->links() }}</div>
+@endsection
