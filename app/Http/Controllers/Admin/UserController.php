@@ -30,7 +30,7 @@ class UserController extends Controller
 
         return view('admin.users.index', [
             'users' => $query->latest()->paginate(20)->withQueryString(),
-            'roles' => Role::orderBy('name')->get(),
+            'roles' => Role::orderBy('name')->get()->unique('slug')->values(),
         ]);
     }
 
@@ -80,10 +80,11 @@ class UserController extends Controller
     public function updateRoles(Request $request, User $user)
     {
         $data = $request->validate(['roles' => ['array']]);
-        $roleIds = Role::whereIn('slug', $data['roles'] ?? [])->pluck('id');
+        $roleIds = Role::orderBy('id')->get()->unique('slug')->whereIn('slug', $data['roles'] ?? [])->pluck('id')->values();
 
         UserRole::where('user_id', $user->id)
-            ->whereNotIn('role_id', $roleIds)
+            ->when($roleIds->isNotEmpty(), fn ($q) => $q->whereNotIn('role_id', $roleIds))
+            ->when($roleIds->isEmpty(), fn ($q) => $q)
             ->delete();
 
         foreach ($roleIds as $roleId) {
