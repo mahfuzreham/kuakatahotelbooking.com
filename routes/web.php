@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function(){
  Route::middleware('admin')->group(function(){
  Route::get('/dashboard/admin',[DashboardController::class,'admin'])->name('dashboard.admin');
  Route::get('/admin/users',[UserController::class,'index'])->name('admin.users.index');
+ Route::get('/admin/customers',[UserController::class,'customers'])->name('admin.customers.index');
  Route::post('/admin/users/{user}/roles',[UserController::class,'updateRoles'])->name('admin.users.roles');
  Route::get('/admin/bookings',[AdminBookingController::class,'index'])->name('admin.bookings.index');
  Route::post('/admin/bookings/{booking}/status',[AdminBookingController::class,'updateStatus'])->name('admin.bookings.status');
