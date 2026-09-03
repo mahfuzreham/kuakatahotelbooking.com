@@ -32,6 +32,27 @@ class UserController extends Controller
         ]);
     }
 
+    public function customers(Request $request)
+    {
+        $query = User::query()
+            ->withCount('bookings')
+            ->whereDoesntHave('roles.role', function ($q) {
+                $q->whereIn('slug', ['admin', 'vendor', 'hotel_manager']);
+            });
+
+        if ($search = trim((string) $request->query('q'))) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
+            });
+        }
+
+        return view('admin.customers.index', [
+            'customers' => $query->latest()->paginate(20)->withQueryString(),
+        ]);
+    }
+
     public function updateRoles(Request $request, User $user)
     {
         $data = $request->validate(['roles' => ['array']]);
