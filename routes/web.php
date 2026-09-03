@@ -65,10 +65,10 @@ Route::middleware('auth')->group(function(){
  Route::post('/admin/properties/{property}/approve',[AdminPropertyController::class,'approve'])->name('admin.properties.approve');
  Route::post('/admin/properties/{property}/reject',[AdminPropertyController::class,'reject'])->name('admin.properties.reject');
  });
- Route::middleware('role:vendor')->group(function(){
+ Route::get('/vendor/register',[VendorRegistrationController::class,'create'])->middleware('auth')->name('vendor.register');
+Route::post('/vendor/register',[VendorRegistrationController::class,'store'])->middleware('auth')->name('vendor.register.store');
+Route::middleware('role:vendor')->group(function(){
  Route::get('/dashboard/vendor',[CustomerDashboardController::class,'vendor'])->name('vendor.dashboard');
- Route::get('/vendor/register',[VendorRegistrationController::class,'create'])->name('vendor.register');
- Route::post('/vendor/register',[VendorRegistrationController::class,'store'])->name('vendor.register.store');
  Route::get('/vendor/properties',[VendorPropertyController::class,'index'])->name('vendor.properties.index');
  Route::get('/vendor/properties/create',[VendorPropertyController::class,'create'])->name('vendor.properties.create');
  Route::post('/vendor/properties',[VendorPropertyController::class,'store'])->name('vendor.properties.store');
