@@ -27,10 +27,12 @@ class ShurjoPayController extends Controller
             $amount=(float)($record['amount']??0);
 
             DB::transaction(function()use($payment,$record,$success,$amount){
-                $payment->lockForUpdate()->firstOrFail();
+                $payment=Payment::whereKey($payment->id)->lockForUpdate()->firstOrFail();
+                if($payment->status==='paid'){ return; }
                 if($success && abs($amount-(float)$payment->amount)<0.01){
                     $payment->update(['status'=>'paid','paid_at'=>now(),'meta'=>array_merge($payment->meta??[],['shurjopay_verification'=>$record,'gateway_order_id'=>$record['order_id']??null])]);
-                    $payment->booking()->lockForUpdate()->firstOrFail()->update(['status'=>'confirmed']);
+                    $booking=$payment->booking()->lockForUpdate()->firstOrFail();
+                    if($booking->status==='pending_payment') $booking->update(['status'=>'confirmed']);
                 } else {
                     $payment->update(['status'=>'failed','meta'=>array_merge($payment->meta??[],['shurjopay_verification'=>$record])]);
                 }
