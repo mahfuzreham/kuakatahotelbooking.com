@@ -32,6 +32,7 @@
                         <th>Bookings</th>
                         <th>Email Verified</th>
                         <th>Joined</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,9 +46,10 @@
                             <td><span class="customer-count">{{ $customer->bookings_count }}</span></td>
                             <td>{{ $customer->email_verified_at ? 'Verified' : 'Not verified' }}</td>
                             <td>{{ $customer->created_at?->format('d M Y') }}</td>
+                            <td><a href="{{ route('admin.customers.show', $customer) }}">View Details</a></td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="customer-empty">No customers found.</td></tr>
+                        <tr><td colspan="6" class="customer-empty">No customers found.</td></tr>
                     @endforelse
                 </tbody>
             </table>
