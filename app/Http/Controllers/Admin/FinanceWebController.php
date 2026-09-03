@@ -28,7 +28,8 @@ class FinanceWebController extends Controller
             'value'=>['required','numeric','min:0'],
             'priority'=>['nullable','integer','min:0'],
         ]);
-        CommissionRule::create($data+['is_active'=>true,'priority'=>$data['priority']??0]);
+        $rule=CommissionRule::create($data+['is_active'=>true,'priority'=>$data['priority']??0]);
+        ActivityLogger::log($request->user()->id,'commission_rule.created',$rule,'Admin created commission rule',['value'=>$rule->value,'type'=>$rule->type]);
         return back()->with('success','Commission rule added');
     }
 
@@ -48,6 +49,7 @@ class FinanceWebController extends Controller
             $wallet=VendorWallet::where('vendor_id',$payout->vendor_id)->lockForUpdate()->first();
             if($wallet) $wallet->increment('paid_balance',$payout->amount);
         });
+        ActivityLogger::log($request->user()->id,'payout.'.$data['action'],$payout,'Admin processed payout',['status'=>$payout->fresh()->status,'amount'=>$payout->amount]);
         return back()->with('success','Payout updated');
     }
 }
