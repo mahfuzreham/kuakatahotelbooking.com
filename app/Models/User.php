@@ -12,5 +12,7 @@ class User extends Authenticatable implements MustVerifyEmail {
  protected function casts():array{return ['email_verified_at'=>'datetime','password'=>'hashed'];}
  public function bookings():HasMany{return $this->hasMany(Booking::class);}
  public function roles():HasMany{return $this->hasMany(UserRole::class);}
- public function isAdmin():bool{return $this->roles()->whereHas('role',fn($q)=>$q->where('slug','admin'))->exists();}
+ public function hasRole(string $role):bool{return $this->roles()->whereHas('role',fn($q)=>$q->where('slug',$role))->exists();}
+ public function managesProperty(int $propertyId):bool{return $this->isAdmin()||$this->roles()->where('property_id',$propertyId)->whereHas('role',fn($q)=>$q->where('slug','hotel_manager'))->exists();}
+ public function isAdmin():bool{return $this->hasRole('admin');}
 }
