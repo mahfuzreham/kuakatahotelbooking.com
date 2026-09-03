@@ -82,7 +82,12 @@ class DemoDataSeeder extends Seeder
 
         VendorWallet::updateOrCreate(
             ['vendor_id' => $vendor->id],
-            ['balance' => 125000, 'currency' => 'BDT']
+            [
+                'pending_balance' => 15000,
+                'available_balance' => 110000,
+                'paid_balance' => 0,
+                'currency' => 'BDT'
+            ]
         );
     }
 }
