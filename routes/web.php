@@ -12,6 +12,7 @@ use App\Http\Controllers\AdminPropertyController;
 use App\Http\Controllers\VendorRegistrationController;
 use App\Http\Controllers\VendorPropertyController;
 use App\Http\Controllers\VendorRoomController;
+use App\Http\Controllers\VendorBookingController;
 use App\Http\Controllers\HotelSearchController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
@@ -82,6 +83,8 @@ Route::middleware('auth')->group(function(){
   Route::get('/vendor/properties/{property}/rooms',[VendorRoomController::class,'index'])->name('vendor.rooms.index');
   Route::post('/vendor/properties/{property}/room-types',[VendorRoomController::class,'storeType'])->name('vendor.room-types.store');
   Route::post('/vendor/properties/{property}/rooms',[VendorRoomController::class,'storeRoom'])->name('vendor.rooms.store');
+  Route::get('/vendor/bookings',[VendorBookingController::class,'index'])->name('vendor.bookings.index');
+  Route::get('/vendor/bookings/{booking}',[VendorBookingController::class,'show'])->name('vendor.bookings.show');
   Route::get('/vendor/payouts',[VendorPayoutController::class,'index'])->name('vendor.payouts.index');
   Route::post('/vendor/payouts',[VendorPayoutController::class,'request'])->name('vendor.payouts.request');
  });
