@@ -8,4 +8,5 @@ class Property extends Model {
  public function vendor():BelongsTo{return $this->belongsTo(Vendor::class);}
  public function roomTypes():HasMany{return $this->hasMany(RoomType::class);}
  public function rooms():HasMany{return $this->hasMany(Room::class);}
+ public function bookings():HasMany{return $this->hasMany(Booking::class);}
 }
