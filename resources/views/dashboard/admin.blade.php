@@ -15,11 +15,11 @@
         <a href="{{ route('admin.verifications.index') }}">KYC / Verification</a>
         <a href="{{ route('admin.notifications.index') }}">Notifications</a>
         <a href="{{ route('admin.audit.index') }}">Audit Logs</a>
+        <a href="{{ route('admin.settings.index') }}">Settings</a>
     </aside>
     <main class="admin-main">
         <p class="eyebrow">ADMIN CONTROL CENTER</p>
         <h1>Dashboard Overview</h1>
-
         <div class="admin-stats">
             <div><span>Total Users</span><strong>{{ number_format($stats['users']) }}</strong></div>
             <div><span>Vendors</span><strong>{{ number_format($stats['vendors']) }}</strong><small>{{ $stats['pending_vendors'] }} pending</small></div>
@@ -30,21 +30,10 @@
             <div><span>Today's Bookings</span><strong>{{ number_format($stats['today_bookings']) }}</strong></div>
             <div><span>Today's Revenue</span><strong>৳{{ number_format((float)$stats['today_revenue'], 2) }}</strong></div>
         </div>
-
         <section class="admin-actions">
-            <a href="{{ route('admin.customers.index') }}">Manage Customers</a>
-            <a href="{{ route('admin.bookings.index') }}">Manage Bookings</a>
-            <a href="{{ route('admin.finance.index') }}">Finance</a>
-            <a href="{{ route('admin.refunds.index') }}">Refunds</a>
+            <a href="{{ route('admin.customers.index') }}">Manage Customers</a><a href="{{ route('admin.bookings.index') }}">Manage Bookings</a><a href="{{ route('admin.finance.index') }}">Finance</a><a href="{{ route('admin.refunds.index') }}">Refunds</a><a href="{{ route('admin.settings.index') }}">Settings</a>
         </section>
-
-        <section id="bookings" class="admin-card">
-            <div class="section-head"><h2>Recent Bookings</h2><span>{{ $recentBookings->count() }} latest</span></div>
-            <div class="admin-table-wrap">
-                <table><thead><tr><th>Booking</th><th>Hotel</th><th>Stay</th><th>Status</th><th>Total</th></tr></thead>
-                <tbody>@forelse($recentBookings as $booking)<tr><td>{{ $booking->booking_number }}</td><td>{{ $booking->property?->name ?? '—' }}</td><td>{{ optional($booking->check_in)->format('d M Y') }} – {{ optional($booking->check_out)->format('d M Y') }}</td><td><span class="status">{{ $booking->status }}</span></td><td>৳{{ number_format((float)$booking->total, 2) }}</td></tr>@empty<tr><td colspan="5">No bookings yet.</td></tr>@endforelse</tbody></table>
-            </div>
-        </section>
+        <section id="bookings" class="admin-card"><div class="section-head"><h2>Recent Bookings</h2><span>{{ $recentBookings->count() }} latest</span></div><div class="admin-table-wrap"><table><thead><tr><th>Booking</th><th>Hotel</th><th>Stay</th><th>Status</th><th>Total</th></tr></thead><tbody>@forelse($recentBookings as $booking)<tr><td>{{ $booking->booking_number }}</td><td>{{ $booking->property?->name ?? '—' }}</td><td>{{ optional($booking->check_in)->format('d M Y') }} – {{ optional($booking->check_out)->format('d M Y') }}</td><td><span class="status">{{ $booking->status }}</span></td><td>৳{{ number_format((float)$booking->total, 2) }}</td></tr>@empty<tr><td colspan="5">No bookings yet.</td></tr>@endforelse</tbody></table></div></section>
         <section class="admin-card mt-4"><div class="section-head"><h2>7-Day Booking Activity</h2></div><div class="trend-list">@forelse($bookingTrend as $day)<div class="trend-row"><span>{{ \Carbon\Carbon::parse($day->day)->format('D, d M') }}</span><strong>{{ $day->total }} bookings</strong></div>@empty<div>No booking activity yet.</div>@endforelse</div></section>
         <section class="admin-card mt-4"><div class="section-head"><h2>Recent Paid Payments</h2><a href="{{ route('admin.finance.index') }}">View Finance</a></div><div class="admin-table-wrap"><table><thead><tr><th>Booking</th><th>Hotel</th><th>Amount</th><th>Paid At</th></tr></thead><tbody>@forelse($recentPayments as $payment)<tr><td>{{ $payment->booking?->booking_number ?? '—' }}</td><td>{{ $payment->booking?->property?->name ?? '—' }}</td><td>৳{{ number_format((float)$payment->amount,2) }}</td><td>{{ optional($payment->paid_at)->format('d M Y H:i') }}</td></tr>@empty<tr><td colspan="4">No paid payments yet.</td></tr>@endforelse</tbody></table></div></section>
     </main>
