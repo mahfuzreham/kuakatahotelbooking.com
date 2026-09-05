@@ -1,4 +1,75 @@
 @extends('layouts.app')
+
 @section('content')
-<div class="vendor-app"><div class="vendor-shell"><aside class="vendor-sidebar"><a class="vendor-brand" href="{{ route('vendor.dashboard') }}">Kuakata<span>Stay</span></a><nav class="vendor-nav"><a href="{{ route('vendor.dashboard') }}">Dashboard</a><a href="{{ route('vendor.properties.index') }}">Properties</a><a class="active" href="{{ route('vendor.bookings.index') }}">Bookings</a><a href="{{ route('vendor.payouts.index') }}">Wallet & Payouts</a></nav></aside><section class="vendor-content"><header class="vendor-topbar"><strong>Bookings</strong><a class="vendor-btn secondary" href="{{ route('vendor.dashboard') }}">Dashboard</a></header><main class="vendor-main"><p class="vendor-eyebrow">RESERVATIONS</p><h1 class="vendor-title">Property bookings</h1><form class="vendor-card vendor-form" method="GET" action="{{ route('vendor.bookings.index') }}" style="margin-top:20px"><div class="vendor-form-grid"><div class="vendor-field"><label>Search</label><input name="q" value="{{ $q }}" placeholder="Booking number, guest or email"></div><div class="vendor-field"><label>Status</label><select name="status"><option value="">All statuses</option>@foreach(['pending_payment','confirmed','checked_in','completed','cancelled'] as $s)<option value="{{ $s }}" @selected($status===$s)>{{ strtoupper(str_replace('_',' ',$s)) }}</option>@endforeach</select></div></div><div class="vendor-actions"><button class="vendor-btn" type="submit">Filter bookings</button><a class="vendor-btn secondary" href="{{ route('vendor.bookings.index') }}">Reset</a></div></form><div class="vendor-section"><div class="vendor-table-wrap"><table class="vendor-table"><thead><tr><th>Booking</th><th>Property</th><th>Guest</th><th>Stay</th><th>Status</th><th>Total</th><th></th></tr></thead><tbody>@forelse($bookings as $booking)<tr><td>#{{ $booking->booking_number }}</td><td>{{ $booking->property?->name ?? '—' }}</td><td>{{ $booking->guest_name }}<br><small>{{ $booking->guest_email }}</small></td><td>{{ optional($booking->check_in)->format('d M Y') }} – {{ optional($booking->check_out)->format('d M Y') }}</td><td><span class="vendor-badge">{{ strtoupper(str_replace('_',' ',$booking->status)) }}</span></td><td>৳{{ number_format((float)$booking->total,2) }}</td><td><a class="vendor-btn secondary" href="{{ route('vendor.bookings.show',$booking) }}">View</a></td></tr>@empty<tr><td colspan="7" class="vendor-muted">No bookings found.</td></tr>@endforelse</tbody></table></div>{{ $bookings->links() }}</div></main></section></div></div>
+<div class="vendor-app">
+    <div class="vendor-shell">
+        <aside class="vendor-sidebar">
+            <a class="vendor-brand" href="{{ route('vendor.dashboard') }}">Kuakata<span>Stay</span></a>
+            <nav class="vendor-nav">
+                <a href="{{ route('vendor.dashboard') }}">Dashboard</a>
+                <a href="{{ route('vendor.properties.index') }}">Properties</a>
+                <a class="active" href="{{ route('vendor.bookings.index') }}">Bookings</a>
+                <a href="{{ route('vendor.payouts.index') }}">Wallet & Payouts</a>
+            </nav>
+        </aside>
+        <section class="vendor-content">
+            <header class="vendor-topbar">
+                <strong>Bookings</strong>
+                <a class="vendor-btn secondary" href="{{ route('vendor.dashboard') }}">Dashboard</a>
+            </header>
+            <main class="vendor-main">
+                <p class="vendor-eyebrow">RESERVATIONS</p>
+                <h1 class="vendor-title">Property bookings</h1>
+
+                <form class="vendor-card vendor-form" method="GET" action="{{ route('vendor.bookings.index') }}" style="margin-top:20px">
+                    <div class="vendor-form-grid">
+                        <div class="vendor-field">
+                            <label>Search</label>
+                            <input name="q" value="{{ $q }}" placeholder="Booking number, guest or email">
+                        </div>
+                        <div class="vendor-field">
+                            <label>Status</label>
+                            <select name="status">
+                                <option value="">All statuses</option>
+                                @foreach (['pending_payment','confirmed','checked_in','completed','cancelled'] as $s)
+                                    <option value="{{ $s }}" @selected($status === $s)>{{ strtoupper(str_replace('_', ' ', $s)) }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="vendor-actions">
+                        <button class="vendor-btn" type="submit">Filter bookings</button>
+                        <a class="vendor-btn secondary" href="{{ route('vendor.bookings.index') }}">Reset</a>
+                    </div>
+                </form>
+
+                <div class="vendor-section">
+                    <div class="vendor-table-wrap">
+                        <table class="vendor-table">
+                            <thead>
+                                <tr><th>Booking</th><th>Property</th><th>Guest</th><th>Stay</th><th>Status</th><th>Total</th><th></th></tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($bookings as $booking)
+                                    <tr>
+                                        <td>#{{ $booking->booking_number }}</td>
+                                        <td>{{ $booking->property?->name ?? '—' }}</td>
+                                        <td>{{ $booking->guest_name }}<br><small>{{ $booking->guest_email }}</small></td>
+                                        <td>{{ optional($booking->check_in)->format('d M Y') }} – {{ optional($booking->check_out)->format('d M Y') }}</td>
+                                        <td><span class="vendor-badge">{{ strtoupper(str_replace('_', ' ', $booking->status)) }}</span></td>
+                                        <td>৳{{ number_format((float) $booking->total, 2) }}</td>
+                                        <td><a class="vendor-btn secondary" href="{{ route('vendor.bookings.show', $booking) }}">View</a></td>
+                                    </tr>
+                                @empty
+                                    <tr><td colspan="7" class="vendor-muted">No bookings found.</td></tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                    {{ $bookings->links() }}
+                </div>
+            </main>
+        </section>
+    </div>
+</div>
 @endsection
