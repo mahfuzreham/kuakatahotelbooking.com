@@ -47,8 +47,8 @@
                                 <p>
                                     {{ $property->city }} ·
                                     {{ ucfirst(str_replace('_', ' ', $property->type)) }} ·
-                                    {{ $property->room_types_count }} room types ·
-                                    {{ $property->rooms_count }} rooms
+                                    {{ $property->room_types_count ?? 0 }} room types ·
+                                    {{ $property->rooms_count ?? 0 }} rooms
                                 </p>
                             </div>
 
