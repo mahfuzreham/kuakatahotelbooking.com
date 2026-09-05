@@ -19,13 +19,15 @@ class StayController extends Controller {
  }
  public function checkOut(Request $r,Booking $booking){
   $this->authorizeProperty($r,$booking->property_id);
+  $d=$r->validate(['room_id'=>['required','integer','exists:rooms,id']]);
   abort_if($booking->status!=='checked_in',422,'Booking is not checked in.');
-  DB::transaction(function()use($booking){
+  DB::transaction(function()use($booking,$d){
    $freshBooking=Booking::whereKey($booking->id)->lockForUpdate()->firstOrFail();
    abort_if($freshBooking->status!=='checked_in',422,'Booking is not checked in.');
-   $room=Room::where('property_id',$freshBooking->property_id)->where('status','occupied')->whereHas('bookings',fn($q)=>$q->whereKey($freshBooking->id))->lockForUpdate()->first();
+   $room=Room::whereKey($d['room_id'])->where('property_id',$freshBooking->property_id)->lockForUpdate()->firstOrFail();
+   abort_if($room->status!=='occupied',422,'Room is not occupied.');
    $freshBooking->update(['status'=>'completed']);
-   if($room) $room->update(['status'=>'cleaning']);
+   $room->update(['status'=>'cleaning']);
   });
   return response()->json(['message'=>'Checked out']);
  }
