@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CommissionRule;
 use App\Models\Payout;
 use App\Models\VendorWallet;
+use App\Support\ActivityLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -36,16 +37,21 @@ class FinanceWebController extends Controller
     public function processPayout(Request $request,Payout $payout){
         $data=$request->validate(['action'=>['required','in:approve,reject,mark_paid'],'reference'=>['nullable','string','max:255']]);
         DB::transaction(function() use($payout,$data){
-            $payout->lockForUpdate();
-            abort_if(!in_array($payout->status,['requested','approved'],true),422);
+            $payout=Payout::whereKey($payout->id)->lockForUpdate()->firstOrFail();
+            if($data['action']==='approve'){
+                abort_if($payout->status!=='requested',422,'Only requested payouts can be approved.');
+                $payout->update(['status'=>'approved']); return;
+            }
             if($data['action']==='reject'){
+                abort_if(!in_array($payout->status,['requested','approved'],true),422,'Payout cannot be rejected in its current state.');
                 $payout->update(['status'=>'rejected']);
                 $wallet=VendorWallet::where('vendor_id',$payout->vendor_id)->lockForUpdate()->first();
                 if($wallet) $wallet->increment('available_balance',$payout->amount);
                 return;
             }
-            if($data['action']==='approve'){ $payout->update(['status'=>'approved']); return; }
-            $payout->update(['status'=>'paid','reference'=>$data['reference']??null,'processed_at'=>now()]);
+            abort_if($payout->status!=='approved',422,'Payout must be approved before marking it paid.');
+            abort_if(blank($data['reference'] ?? null),422,'Payment reference is required.');
+            $payout->update(['status'=>'paid','reference'=>$data['reference'],'processed_at'=>now()]);
             $wallet=VendorWallet::where('vendor_id',$payout->vendor_id)->lockForUpdate()->first();
             if($wallet) $wallet->increment('paid_balance',$payout->amount);
         });
