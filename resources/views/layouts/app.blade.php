@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="{{ asset('public/css/auth.css') }}?v=2">
 <link rel="stylesheet" href="{{ asset('public/css/search-results.css') }}?v=1">
 <link rel="stylesheet" href="{{ asset('public/css/vendor.css') }}?v=1">
+<link rel="stylesheet" href="{{ asset('public/css/logout.css') }}?v=1">
 </head>
 <body>
 @yield('content')
