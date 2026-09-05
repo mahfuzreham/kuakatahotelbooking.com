@@ -1,4 +1,125 @@
 @extends('layouts.app')
+
 @section('content')
-<div class="vendor-app"><div class="vendor-shell"><aside class="vendor-sidebar"><a class="vendor-brand" href="{{ route('vendor.dashboard') }}">Kuakata<span>Stay</span></a><nav class="vendor-nav"><a href="{{ route('vendor.dashboard') }}">Dashboard</a><a href="{{ route('vendor.properties.index') }}">Properties</a><a href="{{ route('vendor.bookings.index') }}">Bookings</a><a class="active" href="{{ route('vendor.rooms.index',$property) }}">Rooms</a><a href="{{ route('vendor.payouts.index') }}">Wallet & Payouts</a></nav></aside><section class="vendor-content"><header class="vendor-topbar"><strong>Room Management</strong><a class="vendor-btn secondary" href="{{ route('vendor.properties.index') }}">Back</a></header><main class="vendor-main"><p class="vendor-eyebrow">ROOM MANAGEMENT</p><h1 class="vendor-title">{{ $property->name }}</h1>@if(session('success'))<div class="vendor-alert" style="margin-top:16px">{{ session('success') }}</div>@endif@if($errors->any())<div class="vendor-errors" style="margin-top:16px">{{ $errors->first() }}</div>@endif<div class="vendor-form-grid vendor-section"><div class="vendor-card"><h2>Add room type</h2><form class="vendor-form" method="POST" action="{{ route('vendor.room-types.store',$property) }}">@csrf<div class="vendor-field"><label>Name</label><input name="name" placeholder="Deluxe Sea View" required></div><div class="vendor-form-grid"><div class="vendor-field"><label>Capacity</label><input type="number" name="capacity" value="2" min="1" max="30" required></div><div class="vendor-field"><label>Inventory</label><input type="number" name="inventory" value="1" min="1" required></div></div><div class="vendor-field"><label>Base price (BDT)</label><input type="number" name="base_price" min="0" step="0.01" required></div><button class="vendor-btn">Add room type</button></form></div><div class="vendor-card"><h2>Add physical room</h2><form class="vendor-form" method="POST" action="{{ route('vendor.rooms.store',$property) }}">@csrf<div class="vendor-field"><label>Room type</label><select name="room_type_id" required>@foreach($property->roomTypes as $type)<option value="{{ $type->id }}">{{ $type->name }}</option>@endforeach</select></div><div class="vendor-form-grid"><div class="vendor-field"><label>Room number</label><input name="room_number" required></div><div class="vendor-field"><label>Floor</label><input name="floor"></div></div><div class="vendor-field"><label>Status</label><select name="status"><option value="available">Available</option><option value="maintenance">Maintenance</option><option value="blocked">Blocked</option></select></div><div class="vendor-field"><label>Notes</label><textarea name="notes"></textarea></div><button class="vendor-btn">Add room</button></form></div></div><div class="vendor-section"><div class="vendor-section-head"><h2>Room types & pricing</h2></div><div class="vendor-list">@forelse($property->roomTypes as $type)<div class="vendor-row"><div class="vendor-row-main"><strong>{{ $type->name }}</strong><p>{{ $type->capacity }} guests · {{ $type->inventory }} rooms · Base ৳{{ number_format((float)$type->base_price,2) }}</p></div><div class="vendor-actions"><span class="vendor-badge">{{ $type->availability()->count() }} custom dates</span><a class="vendor-btn secondary" href="{{ route('vendor.availability.edit',$type) }}">Manage Availability</a></div></div>@empty<div class="vendor-card vendor-muted">No room types yet.</div>@endforelse</div></div><div class="vendor-section"><div class="vendor-section-head"><h2>Physical rooms & status</h2></div><div class="vendor-list">@forelse($property->rooms as $room)<div class="vendor-row"><div class="vendor-row-main"><strong>Room {{ $room->room_number }}</strong><p>{{ $room->roomType?->name }} · Floor {{ $room->floor ?: '—' }}</p></div><form method="POST" action="{{ route('vendor.rooms.update',[$property,$room]) }}" class="vendor-actions">@csrf<select name="status" class="vendor-field" style="padding:9px;border:1px solid #d8e0e8;border-radius:10px"><option value="available" @selected($room->status==='available')>Available</option><option value="maintenance" @selected($room->status==='maintenance')>Maintenance</option><option value="blocked" @selected($room->status==='blocked')>Blocked</option></select><input type="hidden" name="floor" value="{{ $room->floor }}"><input type="hidden" name="notes" value="{{ $room->notes }}"><button class="vendor-btn secondary" type="submit">Update</button></form></div>@empty<div class="vendor-card vendor-muted">No physical rooms yet.</div>@endforelse</div></div></main></section></div></div>
+<div class="vendor-app">
+    <div class="vendor-shell">
+        <aside class="vendor-sidebar">
+            <a class="vendor-brand" href="{{ route('vendor.dashboard') }}">Kuakata<span>Stay</span></a>
+            <nav class="vendor-nav">
+                <a href="{{ route('vendor.dashboard') }}">Dashboard</a>
+                <a href="{{ route('vendor.properties.index') }}">Properties</a>
+                <a href="{{ route('vendor.bookings.index') }}">Bookings</a>
+                <a class="active" href="{{ route('vendor.rooms.index', $property) }}">Rooms</a>
+                <a href="{{ route('vendor.payouts.index') }}">Wallet & Payouts</a>
+            </nav>
+        </aside>
+        <section class="vendor-content">
+            <header class="vendor-topbar">
+                <strong>Room Management</strong>
+                <a class="vendor-btn secondary" href="{{ route('vendor.properties.index') }}">Back</a>
+            </header>
+            <main class="vendor-main">
+                <p class="vendor-eyebrow">ROOM MANAGEMENT</p>
+                <h1 class="vendor-title">{{ $property->name }}</h1>
+
+                @if (session('success'))
+                    <div class="vendor-alert" style="margin-top:16px">{{ session('success') }}</div>
+                @endif
+                @if ($errors->any())
+                    <div class="vendor-errors" style="margin-top:16px">{{ $errors->first() }}</div>
+                @endif
+
+                <div class="vendor-form-grid vendor-section">
+                    <div class="vendor-card">
+                        <h2>Add room type</h2>
+                        <form class="vendor-form" method="POST" action="{{ route('vendor.room-types.store', $property) }}">
+                            @csrf
+                            <div class="vendor-field"><label>Name</label><input name="name" placeholder="Deluxe Sea View" required></div>
+                            <div class="vendor-form-grid">
+                                <div class="vendor-field"><label>Capacity</label><input type="number" name="capacity" value="2" min="1" max="30" required></div>
+                                <div class="vendor-field"><label>Inventory</label><input type="number" name="inventory" value="1" min="1" required></div>
+                            </div>
+                            <div class="vendor-field"><label>Base price (BDT)</label><input type="number" name="base_price" min="0" step="0.01" required></div>
+                            <button class="vendor-btn" type="submit">Add room type</button>
+                        </form>
+                    </div>
+
+                    <div class="vendor-card">
+                        <h2>Add physical room</h2>
+                        <form class="vendor-form" method="POST" action="{{ route('vendor.rooms.store', $property) }}">
+                            @csrf
+                            <div class="vendor-field">
+                                <label>Room type</label>
+                                <select name="room_type_id" required>
+                                    @forelse ($property->roomTypes as $type)
+                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                    @empty
+                                        <option value="">Add a room type first</option>
+                                    @endforelse
+                                </select>
+                            </div>
+                            <div class="vendor-form-grid">
+                                <div class="vendor-field"><label>Room number</label><input name="room_number" required></div>
+                                <div class="vendor-field"><label>Floor</label><input name="floor"></div>
+                            </div>
+                            <div class="vendor-field">
+                                <label>Status</label>
+                                <select name="status"><option value="available">Available</option><option value="maintenance">Maintenance</option><option value="blocked">Blocked</option></select>
+                            </div>
+                            <div class="vendor-field"><label>Notes</label><textarea name="notes"></textarea></div>
+                            <button class="vendor-btn" type="submit" @disabled($property->roomTypes->isEmpty())>Add room</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="vendor-section">
+                    <div class="vendor-section-head"><h2>Room types & pricing</h2></div>
+                    <div class="vendor-list">
+                        @forelse ($property->roomTypes as $type)
+                            <div class="vendor-row">
+                                <div class="vendor-row-main">
+                                    <strong>{{ $type->name }}</strong>
+                                    <p>{{ $type->capacity }} guests · {{ $type->inventory }} rooms · Base ৳{{ number_format((float) $type->base_price, 2) }}</p>
+                                </div>
+                                <div class="vendor-actions">
+                                    <span class="vendor-badge">{{ $type->availability()->count() }} custom dates</span>
+                                    <a class="vendor-btn secondary" href="{{ route('vendor.availability.edit', $type) }}">Manage Availability</a>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="vendor-card vendor-muted">No room types yet.</div>
+                        @endforelse
+                    </div>
+                </div>
+
+                <div class="vendor-section">
+                    <div class="vendor-section-head"><h2>Physical rooms & status</h2></div>
+                    <div class="vendor-list">
+                        @forelse ($property->rooms as $room)
+                            <div class="vendor-row">
+                                <div class="vendor-row-main">
+                                    <strong>Room {{ $room->room_number }}</strong>
+                                    <p>{{ $room->roomType?->name }} · Floor {{ $room->floor ?: '—' }}</p>
+                                </div>
+                                <form method="POST" action="{{ route('vendor.rooms.update', [$property, $room]) }}" class="vendor-actions">
+                                    @csrf
+                                    <select name="status" class="vendor-field" style="padding:9px;border:1px solid #d8e0e8;border-radius:10px">
+                                        <option value="available" @selected($room->status === 'available')>Available</option>
+                                        <option value="maintenance" @selected($room->status === 'maintenance')>Maintenance</option>
+                                        <option value="blocked" @selected($room->status === 'blocked')>Blocked</option>
+                                    </select>
+                                    <input type="hidden" name="floor" value="{{ $room->floor }}">
+                                    <input type="hidden" name="notes" value="{{ $room->notes }}">
+                                    <button class="vendor-btn secondary" type="submit">Update</button>
+                                </form>
+                            </div>
+                        @empty
+                            <div class="vendor-card vendor-muted">No physical rooms yet.</div>
+                        @endforelse
+                    </div>
+                </div>
+            </main>
+        </section>
+    </div>
+</div>
 @endsection
