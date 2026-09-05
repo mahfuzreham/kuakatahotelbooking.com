@@ -17,6 +17,7 @@ class VendorBookingController extends Controller
         $vendor = $this->vendor($request);
         $propertyIds = $vendor->properties()->pluck('id');
         $query = Booking::with('property')->whereIn('property_id', $propertyIds)->latest();
+        if ($request->filled('property_id')) $query->where('property_id', $request->integer('property_id'));
         if ($request->filled('status')) $query->where('status', $request->string('status')->toString());
         if ($request->filled('q')) {
             $term = trim($request->string('q')->toString());
