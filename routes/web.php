@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\FinanceWebController;
 use App\Http\Controllers\Admin\VerificationWebController;
 use App\Http\Controllers\Admin\NotificationWebController;
 use App\Http\Controllers\Admin\AuditLogController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Vendor\PayoutController as VendorPayoutController;
 use App\Http\Controllers\HotelManager\BookingController as HotelManagerBookingController;
 use App\Http\Controllers\HotelManager\RoomController as HotelManagerRoomController;
@@ -34,17 +35,14 @@ Route::middleware('auth')->group(function(){
 });
 Route::get('/payments/shurjopay/callback',[ShurjoPayController::class,'callback'])->name('shurjopay.callback');
 Route::get('/payments/shurjopay/cancel',[ShurjoPayController::class,'cancel'])->name('shurjopay.cancel');
-
 Route::middleware('guest')->group(function(){Route::get('/register',[AuthController::class,'showRegister'])->name('register');Route::post('/register',[AuthController::class,'register']);Route::get('/login',[AuthController::class,'showLogin'])->name('login');Route::post('/login',[AuthController::class,'login']);});
 Route::post('/logout',[AuthController::class,'logout'])->middleware('auth')->name('logout');
-
 Route::middleware('auth')->group(function(){
  Route::get('/email/verify',fn()=>view('auth.verify-email'))->name('verification.notice');
  Route::get('/email/verify/{id}/{hash}',function(EmailVerificationRequest $request){$request->fulfill();return redirect()->route('customer.dashboard');})->middleware('signed')->name('verification.verify');
  Route::post('/email/verification-notification',function(Request $request){$request->user()->sendEmailVerificationNotification();return back()->with('status','verification-link-sent');})->middleware('throttle:6,1')->name('verification.send');
  Route::get('/account',[CustomerDashboardController::class,'index'])->name('customer.dashboard');
  Route::get('/account/bookings/{booking}',[CustomerDashboardController::class,'booking'])->name('customer.booking');
-
  Route::middleware('admin')->group(function(){
   Route::get('/dashboard/admin',[DashboardController::class,'admin'])->name('dashboard.admin');
   Route::get('/admin/users',[UserController::class,'index'])->name('admin.users.index');
@@ -71,8 +69,9 @@ Route::middleware('auth')->group(function(){
   Route::get('/admin/properties',[AdminPropertyController::class,'index'])->name('admin.properties.index');
   Route::post('/admin/properties/{property}/approve',[AdminPropertyController::class,'approve'])->name('admin.properties.approve');
   Route::post('/admin/properties/{property}/reject',[AdminPropertyController::class,'reject'])->name('admin.properties.reject');
+  Route::get('/admin/settings',[SettingsController::class,'index'])->name('admin.settings.index');
+  Route::post('/admin/settings',[SettingsController::class,'update'])->name('admin.settings.update');
  });
-
  Route::get('/vendor/register',[VendorRegistrationController::class,'create'])->name('vendor.register');
  Route::post('/vendor/register',[VendorRegistrationController::class,'store'])->name('vendor.register.store');
  Route::middleware('role:vendor')->group(function(){
@@ -86,7 +85,6 @@ Route::middleware('auth')->group(function(){
   Route::get('/vendor/payouts',[VendorPayoutController::class,'index'])->name('vendor.payouts.index');
   Route::post('/vendor/payouts',[VendorPayoutController::class,'request'])->name('vendor.payouts.request');
  });
-
  Route::middleware('role:hotel_manager')->group(function(){
   Route::get('/dashboard/hotel',[DashboardController::class,'hotel'])->name('dashboard.hotel');
   Route::get('/hotel-manager/bookings',[HotelManagerBookingController::class,'index'])->name('hotel-manager.bookings.index');
