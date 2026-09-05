@@ -1,4 +1,58 @@
 @extends('layouts.app')
+
 @section('content')
-<div class="vendor-app"><div class="vendor-shell"><aside class="vendor-sidebar"><a class="vendor-brand" href="{{ route('vendor.dashboard') }}">Kuakata<span>Stay</span></a><nav class="vendor-nav"><a href="{{ route('vendor.dashboard') }}">Dashboard</a><a class="active" href="{{ route('vendor.properties.index') }}">Properties</a><a href="{{ route('vendor.payouts.index') }}">Wallet & Payouts</a></nav></aside><section class="vendor-content"><header class="vendor-topbar"><strong>Add Property</strong><a class="vendor-btn secondary" href="{{ route('vendor.properties.index') }}">Back</a></header><main class="vendor-main"><p class="vendor-eyebrow">NEW PROPERTY</p><h1 class="vendor-title">Add your hotel or resort</h1>@if($errors->any())<div class="vendor-errors" style="margin-top:16px">{{ $errors->first() }}</div>@endif<div class="vendor-card vendor-section"><form class="vendor-form" method="POST" action="{{ route('vendor.properties.store') }}">@csrf<div class="vendor-form-grid"><div class="vendor-field"><label>Property name</label><input name="name" value="{{ old('name') }}" required></div><div class="vendor-field"><label>Type</label><select name="type"><option value="hotel">Hotel</option><option value="resort">Resort</option><option value="guest_house">Guest House</option></select></div><div class="vendor-field"><label>City</label><input name="city" value="{{ old('city','Kuakata') }}" required></div><div class="vendor-field"><label>Address</label><input name="address" value="{{ old('address') }}"></div></div><button class="vendor-btn" type="submit">Save property as draft</button></form></div></main></section></div></div>
+<div class="vendor-app">
+    <div class="vendor-shell">
+        <aside class="vendor-sidebar">
+            <a class="vendor-brand" href="{{ route('vendor.dashboard') }}">Kuakata<span>Stay</span></a>
+            <nav class="vendor-nav">
+                <a href="{{ route('vendor.dashboard') }}">Dashboard</a>
+                <a class="active" href="{{ route('vendor.properties.index') }}">Properties</a>
+                <a href="{{ route('vendor.bookings.index') }}">Bookings</a>
+                <a href="{{ route('vendor.payouts.index') }}">Wallet & Payouts</a>
+            </nav>
+        </aside>
+        <section class="vendor-content">
+            <header class="vendor-topbar">
+                <strong>Add Property</strong>
+                <a class="vendor-btn secondary" href="{{ route('vendor.properties.index') }}">Back</a>
+            </header>
+            <main class="vendor-main">
+                <p class="vendor-eyebrow">NEW PROPERTY</p>
+                <h1 class="vendor-title">Add your hotel or resort</h1>
+                @if ($errors->any())
+                    <div class="vendor-errors" style="margin-top:16px">{{ $errors->first() }}</div>
+                @endif
+                <div class="vendor-card vendor-section">
+                    <form class="vendor-form" method="POST" action="{{ route('vendor.properties.store') }}">
+                        @csrf
+                        <div class="vendor-form-grid">
+                            <div class="vendor-field">
+                                <label>Property name</label>
+                                <input name="name" value="{{ old('name') }}" required>
+                            </div>
+                            <div class="vendor-field">
+                                <label>Type</label>
+                                <select name="type" required>
+                                    <option value="hotel" @selected(old('type') === 'hotel')>Hotel</option>
+                                    <option value="resort" @selected(old('type') === 'resort')>Resort</option>
+                                    <option value="guest_house" @selected(old('type') === 'guest_house')>Guest House</option>
+                                </select>
+                            </div>
+                            <div class="vendor-field">
+                                <label>City</label>
+                                <input name="city" value="{{ old('city', 'Kuakata') }}" required>
+                            </div>
+                            <div class="vendor-field">
+                                <label>Address</label>
+                                <input name="address" value="{{ old('address') }}">
+                            </div>
+                        </div>
+                        <button class="vendor-btn" type="submit">Save property as draft</button>
+                    </form>
+                </div>
+            </main>
+        </section>
+    </div>
+</div>
 @endsection
