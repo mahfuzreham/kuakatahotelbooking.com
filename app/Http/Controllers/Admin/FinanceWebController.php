@@ -9,7 +9,7 @@ use App\Support\ActivityLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class FinanceWebController
+class FinanceWebController extends Controller
 {
     public function index(){
         return view('admin.finance.index',[
