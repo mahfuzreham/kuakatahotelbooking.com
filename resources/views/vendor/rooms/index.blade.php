@@ -11,6 +11,11 @@
                 <a href="{{ route('vendor.bookings.index') }}">Bookings</a>
                 <a class="active" href="{{ route('vendor.rooms.index', $property) }}">Rooms</a>
                 <a href="{{ route('vendor.payouts.index') }}">Wallet & Payouts</a>
+                <a href="{{ route('customer.dashboard') }}">Customer Account</a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button class="vendor-btn secondary" style="width:100%;margin-top:8px">Sign out</button>
+                </form>
             </nav>
         </aside>
         <section class="vendor-content">
